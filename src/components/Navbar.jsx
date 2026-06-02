@@ -21,7 +21,7 @@ const navLinks = [
   {/* Logo */}
   <Link href="/" className="flex items-center gap-2">
     <Image
-      src="/logo.png"
+      src="/images/logo.png"
       alt="HireLoop"
       width={140}
       height={40}
