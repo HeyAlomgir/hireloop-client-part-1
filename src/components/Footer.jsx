@@ -5,6 +5,7 @@ import {
   LogoLinkedin,
 
 } from "@gravity-ui/icons";
+import Image from "next/image";
 
 export default function Footer() {
     return (
@@ -17,11 +18,13 @@ export default function Footer() {
                     {/* Logo Section */}
                     <div>
                         <Link href="/" className="inline-block">
-                            <img
-                                src="/logo.png"
-                                alt="HireLoop"
-                                className="h-12 w-auto"
-                            />
+                            <Image
+                                  src="/images/logo.png"
+                                  alt="HireLoop"
+                                  width={140}
+                                  height={40}
+                                  className="h-auto w-auto"
+                                />
                         </Link>
 
                         <p className="mt-6 max-w-xs text-sm leading-7 text-gray-400">
