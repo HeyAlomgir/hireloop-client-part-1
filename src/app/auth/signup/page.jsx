@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { Input, Button } from "@heroui/react";
 import { CircleInfoFill } from "@gravity-ui/icons";
 import { authClient } from "@/lib/auth-client";
@@ -11,6 +12,8 @@ export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
+  const router = useRouter();
+
   const handleSignup = async (e) => {
     e.preventDefault();
 
@@ -18,31 +21,34 @@ export default function SignupPage() {
     setSuccess("");
 
     const formData = new FormData(e.currentTarget);
-
     const userData = Object.fromEntries(formData.entries());
-    // console.log(userData);
-
-
 
     try {
       const result = await authClient.signUp.email({
-        name:userData?.name,
-        email:userData?.email,
-        password:userData?.password,
+        name: userData?.name,
+        email: userData?.email,
+        password: userData?.password,
       });
 
       if (result?.error) {
         setError(result.error.message || "Registration failed");
-        toast.error(result.error.message || "Registration failed")
+        toast.error(result.error.message || "Registration failed");
         return;
       }
-    
 
-      setSuccess("Account created successfully! You can now sign in.");
-      toast.success("Account created successfully! You can now sign in.");
+      setSuccess("Account created successfully! Redirecting to sign in...");
+      toast.success("Account created successfully!");
+
       e.target.reset();
+
+      setTimeout(() => {
+        router.push("/auth/signin");
+      }, 1000);
     } catch (err) {
-      setError(err?.message || "Something went wrong");
+      const message = err?.message || "Something went wrong";
+
+      setError(message);
+      toast.error(message);
     }
   };
 
@@ -118,7 +124,7 @@ export default function SignupPage() {
             />
           </div>
 
-          {/* Error */}
+          {/* Error Message */}
           {error && (
             <div className="flex items-center gap-2 rounded-xl border border-red-500/20 bg-red-500/10 p-3 text-sm text-red-400">
               <CircleInfoFill />
@@ -126,7 +132,7 @@ export default function SignupPage() {
             </div>
           )}
 
-          {/* Success */}
+          {/* Success Message */}
           {success && (
             <div className="flex items-center gap-2 rounded-xl border border-green-500/20 bg-green-500/10 p-3 text-sm text-green-400">
               <CircleInfoFill />
@@ -134,12 +140,11 @@ export default function SignupPage() {
             </div>
           )}
 
-          {/* Submit */}
+          {/* Submit Button */}
           <Button
             type="submit"
             color="primary"
             className="w-full"
-     
           >
             Create Account
           </Button>
@@ -149,7 +154,7 @@ export default function SignupPage() {
         <div className="mt-6 text-center text-sm text-gray-400">
           Already have an account?{" "}
           <Link
-            href="/signin"
+            href="/auth/signin"
             className="font-medium text-violet-400 hover:text-violet-300"
           >
             Sign In
