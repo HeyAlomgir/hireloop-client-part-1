@@ -43,7 +43,7 @@ export default function SignupPage() {
 
       setTimeout(() => {
         router.push("/auth/signin");
-      }, 1000);
+      }, 200);
     } catch (err) {
       const message = err?.message || "Something went wrong";
 
