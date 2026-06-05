@@ -7,10 +7,14 @@ import { Input, Button } from "@heroui/react";
 import { CircleInfoFill } from "@gravity-ui/icons";
 import { authClient } from "@/lib/auth-client";
 import toast from "react-hot-toast";
+import { Description, Label, Radio, RadioGroup } from "@heroui/react";
+
 
 export default function SignupPage() {
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
+  const [role, setRole] = useState("seeker");
+
 
   const router = useRouter();
 
@@ -22,12 +26,17 @@ export default function SignupPage() {
 
     const formData = new FormData(e.currentTarget);
     const userData = Object.fromEntries(formData.entries());
+    console.log(userData);
+    
 
     try {
       const result = await authClient.signUp.email({
         name: userData?.name,
         email: userData?.email,
         password: userData?.password,
+        
+        role:role
+        
       });
 
       if (result?.error) {
@@ -40,7 +49,8 @@ export default function SignupPage() {
       toast.success("Account created successfully!");
 
       e.target.reset();
-
+      setRole("seeker");
+      
       setTimeout(() => {
         router.push("/auth/signin");
       }, 200);
@@ -123,6 +133,35 @@ export default function SignupPage() {
               required
             />
           </div>
+
+
+          {/* Role selection */}
+
+           <div className="flex flex-col gap-4">
+            <Label>Subscription plan</Label>
+            <RadioGroup
+            value={role}
+            onChange={(value) => setRole(value)} 
+             name="role" 
+             orientation="horizontal">
+              <Radio  value="seeker">
+                <Radio.Control>
+                  <Radio.Indicator />
+                </Radio.Control>
+                <Radio.Content>
+                  <Label>Job Seeker</Label>
+                </Radio.Content>
+              </Radio>
+              <Radio value="recruter">
+                <Radio.Control>
+                  <Radio.Indicator />
+                </Radio.Control>
+                <Radio.Content>
+                  <Label>Recruter</Label>
+                </Radio.Content>
+              </Radio>
+            </RadioGroup>
+          </div> 
 
           {/* Error Message */}
           {error && (
