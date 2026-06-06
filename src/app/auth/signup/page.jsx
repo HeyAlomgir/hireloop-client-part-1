@@ -15,7 +15,7 @@ export default function SignupPage() {
   const [success, setSuccess] = useState("");
   const [role, setRole] = useState("seeker");
 
-
+const navg =()=>{}
   const router = useRouter();
 
   const handleSignup = async (e) => {
